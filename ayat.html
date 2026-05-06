@@ -104,20 +104,35 @@
     </div>
 
     <script>
-        // إنشاء النقاط البيضاء المتحركة
-        function createFloatingDots() {
-            const container = document.getElementById('floatingDots');
-            const dotCount = 60;
-            for (let i = 0; i < dotCount; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'dot';
-                dot.style.left = Math.random() * 100 + '%';
-                dot.style.animationDuration = (10 + Math.random() * 10) + 's';
-                dot.style.animationDelay = Math.random() * 5 + 's';
-                const size = 3 + Math.random() * 3;
-                dot.style.width = size + 'px';
-                dot.style.height = size + 'px';
-                container.appendChild(dot);
+      function createFloatingDots() {
+    const container = document.getElementById('floatingDots');
+    const dotCount = 100; // عدد نقاط أكثر لمظهر غني
+
+    for (let i = 0; i < dotCount; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        
+        // تغيير مدى الحجم (من 1px إلى 8px) لخلق تباين في العمق
+        const size = Math.random() * 7 + 1; 
+        dot.style.width = size + 'px';
+        dot.style.height = size + 'px';
+
+        // جعل النقاط الكبيرة أسرع قليلاً من الصغيرة لإضافة واقعية
+        const duration = (20 - size) + (Math.random() * 5); 
+        dot.style.animationDuration = duration + 's';
+        
+        // توزيع عشوائي على العرض والبدء
+        dot.style.left = Math.random() * 100 + '%';
+        dot.style.animationDelay = Math.random() * 10 + 's';
+        
+        // إضافة شفافية عشوائية لتعزيز مظهر "الضبابية" أو البعد
+        dot.style.opacity = Math.random() * 0.5 + 0.2;
+
+        container.appendChild(dot);
+    }
+}
+createFloatingDots();
+
             }
         }
         window.addEventListener('load', createFloatingDots);
