@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BASIRA IMAN - بصيرة إيمان</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- شاشة التحميل -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-moon">🌙</div>
+            <div class="loading-stars">
+                <span class="star">✨</span>
+                <span class="star">⭐</span>
+                <span class="star">✨</span>
+            </div>
+            <div class="loading-text">بصيرة إيمان</div>
+            <div class="loading-text-en">BASIRA IMAN</div>
+            <div class="loading-bar">
+                <div class="loading-bar-fill"></div>
+            </div>
+            <div class="loading-subtitle">Insight of Faith</div>
+        </div>
+    </div>
+
+    <!-- النقاط البيضاء المتحركة -->
+    <div class="floating-dots" id="floatingDots"></div>
+
+    <!-- تذكير الصلاة على النبي -->
+    <div class="prayer-reminder">
+        <div class="prayer-ar">صل على النبي محمد 💚</div>
+        <div class="prayer-en">Peace and blessings be upon our Prophet Muhammad</div>
+    </div>
+
+    <!-- زر الوضع الداكن/الفاتح -->
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="تبديل الوضع | Toggle Theme">
+        <i class="fas fa-moon" id="themeIcon"></i>
+    </button>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="container">
+        <!-- عنوان الموقع -->
+        <div class="site-title">
+            <h1 class="site-name">BASIRA IMAN</h1>
+            <div class="site-subtitle">
+                <span class="subtitle-ar">بصيرة إيمان</span>
+                <span class="subtitle-en">Insight of Faith</span>
+            </div>
+        </div>
+
+        <!-- آية اليوم -->
+        <div class="verse-of-day" id="verseOfDay">
+            <div class="vod-header">
+                <div class="vod-icon">📖</div>
+                <div class="vod-title">
+                    <span class="vod-title-ar">آية اليوم</span>
+                    <span class="vod-title-en">Verse of the Day</span>
+                </div>
+            </div>
+            <div class="vod-content">
+                <p class="vod-text" id="vodText">جاري التحميل...</p>
+                <p class="vod-ref" id="vodRef"></p>
+            </div>
+            <div class="vod-actions">
+                <button onclick="refreshVerseOfDay()" class="vod-refresh-btn">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>آية جديدة</span>
+                    <span class="vod-refresh-en">New Verse</span>
+                </button>
+                <button onclick="goToVerseOfDay()" class="vod-read-btn">
+                    <i class="fas fa-book-open"></i>
+                    <span>قراءة المزيد</span>
+                    <span class="vod-read-en">Read More</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- الخيارات الرئيسية -->
+        <div class="main-options">
+            <div class="options-container">
+                <!-- آيات المشاعر -->
+                <a href="ayat.html" class="option-card">
+                    <div class="option-icon">📖</div>
+                    <div class="option-content">
+                        <div class="option-title-ar">آيات المشاعر</div>
+                        <div class="option-title-en">Verses of Emotions</div>
+                    </div>
+                </a>
+
+                <!-- وصايا النبي -->
+                <a href="hadiths.html" class="option-card">
+                    <div class="option-icon">✨</div>
+                    <div class="option-content">
+                        <div class="option-title-ar">وصايا النبي</div>
+                        <div class="option-title-en">Prophet's Teachings</div>
+                    </div>
+                </a>
+
+                <!-- مفضلتي -->
+                <a href="favorites.html" class="option-card">
+                    <div class="option-icon">💖</div>
+                    <div class="option-content">
+                        <div class="option-title-ar">مفضلتي</div>
+                        <div class="option-title-en">My Favorites</div>
+                    </div>
+                </a>
+
+                <!-- للتواصل معنا -->
+                <a href="contact.html" class="option-card">
+                    <div class="option-icon">📞</div>
+                    <div class="option-content">
+                        <div class="option-title-ar">للتواصل معنا</div>
+                        <div class="option-title-en">Contact Us</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // شاشة التحميل
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loadingScreen');
+                loadingScreen.classList.add('fade-out');
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 800);
+            }, 1500);
+        });
+
+        // إنشاء النقاط البيضاء المتحركة
+        function createFloatingDots() {
+            const container = document.getElementById('floatingDots');
+            const dotCount = 30;
+            for (let i = 0; i < dotCount; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                dot.style.left = Math.random() * 100 + '%';
+                dot.style.animationDuration = (10 + Math.random() * 10) + 's';
+                dot.style.animationDelay = Math.random() * 5 + 's';
+                const size = 3 + Math.random() * 3;
+                dot.style.width = size + 'px';
+                dot.style.height = size + 'px';
+                container.appendChild(dot);
+            }
+        }
+        window.addEventListener('load', createFloatingDots);
+
+        // الوضع الداكن/الفاتح
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('themeIcon');
+            const isDark = body.classList.toggle('light-mode');
+
+            if (isDark) {
+                icon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'light');
+            } else {
+                icon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // تحميل الوضع المحفوظ
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const icon = document.getElementById('themeIcon');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                icon.className = 'fas fa-sun';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadTheme);
+
+        // آية اليوم
+        let versesData = null;
+        let currentVOD = null;
+
+        function loadVerseOfDay() {
+            // محاولة تحميل من verses_data.json
+            fetch('verses_data.json')
+                .then(response => response.json())
+                .then(data => {
+                    versesData = data;
+                    displayVerseOfDay();
+                })
+                .catch(error => {
+                    // آيات احتياطية إذا لم يتم تحميل الملف
+                    const fallbackVerses = [
+                        { text: "وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا وَيَرْزُقْهُ مِنْ حَيْثُ لَا يَحْتَسِبُ", ref: "الطلاق: 2-3", emotion: 'happy', index: 0 },
+                        { text: "إِنَّ مَعَ الْعُسْرِ يُسْرًا", ref: "الشرح: 6", emotion: 'sad', index: 0 },
+                        { text: "وَقُل رَّبِّ زِدْنِي عِلْمًا", ref: "طه: 114", emotion: 'message', index: 0 },
+                        { text: "وَإِذَا سَأَلَكَ عِبَادِي عَنِّي فَإِنِّي قَرِيبٌ", ref: "البقرة: 186", emotion: 'alone', index: 0 },
+                        { text: "رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ وَلِلْمُؤْمِنِينَ يَوْمَ يَقُومُ الْحِسَابُ", ref: "إبراهيم: 41", emotion: 'penitent', index: 0 }
+                    ];
+
+                    // اختيار آية عشوائية
+                    const randomIndex = Math.floor(Math.random() * fallbackVerses.length);
+                    currentVOD = fallbackVerses[randomIndex];
+                    document.getElementById('vodText').textContent = currentVOD.text;
+                    document.getElementById('vodRef').textContent = currentVOD.ref;
+                });
+        }
+
+        function displayVerseOfDay() {
+            if (!versesData) return;
+
+            // الحصول على اليوم الحالي كرقم
+            const today = new Date();
+            const daySeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+
+            // جمع جميع الآيات
+            let allVerses = [];
+            Object.keys(versesData).forEach(emotionKey => {
+                const data = versesData[emotionKey];
+                data.verses.forEach((verse, index) => {
+                    allVerses.push({
+                        text: verse.text,
+                        name: verse.name,
+                        emotion: emotionKey,
+                        index: index
+                    });
+                });
+            });
+
+            // اختيار آية بناءً على اليوم (ثابتة لليوم)
+            const seedRandom = (seed) => {
+                let x = Math.sin(seed) * 10000;
+                return x - Math.floor(x);
+            };
+
+            const verseIndex = Math.floor(seedRandom(daySeed) * allVerses.length);
+            currentVOD = allVerses[verseIndex];
+
+            document.getElementById('vodText').textContent = currentVOD.text;
+            document.getElementById('vodRef').textContent = currentVOD.name;
+        }
+
+        function refreshVerseOfDay() {
+            if (!versesData) {
+                loadVerseOfDay();
+                return;
+            }
+
+            // اختيار آية عشوائية مختلفة
+            let allVerses = [];
+            Object.keys(versesData).forEach(emotionKey => {
+                const data = versesData[emotionKey];
+                data.verses.forEach((verse, index) => {
+                    allVerses.push({
+                        text: verse.text,
+                        name: verse.name,
+                        emotion: emotionKey,
+                        index: index
+                    });
+                });
+            });
+
+            const randomIndex = Math.floor(Math.random() * allVerses.length);
+            currentVOD = allVerses[randomIndex];
+
+            // تأثير الانتقال
+            const vodContent = document.querySelector('.vod-content');
+            vodContent.style.opacity = '0';
+            vodContent.style.transform = 'translateY(10px)';
+            vodContent.style.transition = 'all 0.3s ease';
+
+            setTimeout(() => {
+                document.getElementById('vodText').textContent = currentVOD.text;
+                document.getElementById('vodRef').textContent = currentVOD.name;
+                vodContent.style.opacity = '1';
+                vodContent.style.transform = 'translateY(0)';
+            }, 300);
+        }
+
+        function goToVerseOfDay() {
+            if (currentVOD && currentVOD.emotion !== undefined) {
+                window.location.href = `ayat.html#${currentVOD.emotion}_${currentVOD.index}`;
+            }
+        }
+
+        // تحميل آية اليوم عند بدء الصفحة
+        document.addEventListener('DOMContentLoaded', loadVerseOfDay);
+    </script>
+</body>
+</html>

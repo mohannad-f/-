@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مفضلتي - My Favorites - BASIRA IMAN</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- شاشة التحميل -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-moon">🌙</div>
+            <div class="loading-stars">
+                <span class="star">✨</span>
+                <span class="star">⭐</span>
+                <span class="star">✨</span>
+            </div>
+            <div class="loading-text">بصيرة إيمان</div>
+            <div class="loading-text-en">BASIRA IMAN</div>
+            <div class="loading-bar">
+                <div class="loading-bar-fill"></div>
+            </div>
+            <div class="loading-subtitle">Insight of Faith</div>
+        </div>
+    </div>
+
+    <!-- النقاط البيضاء المتحركة -->
+    <div class="floating-dots" id="floatingDots"></div>
+
+    <!-- تذكير الصلاة على النبي -->
+    <div class="prayer-reminder">
+        <div class="prayer-ar">صل على النبي محمد 💚</div>
+        <div class="prayer-en">Peace and blessings be upon our Prophet Muhammad</div>
+    </div>
+
+    <!-- زر الوضع الداكن/الفاتح -->
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="تبديل الوضع | Toggle Theme">
+        <i class="fas fa-moon" id="themeIcon"></i>
+    </button>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="container">
+        <!-- رأس الصفحة -->
+        <header class="page-header">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-right"></i>
+                <span>العودة للرئيسية</span>
+                <span class="back-btn-en">Back to Home</span>
+            </a>
+            <div class="page-title">
+                <h1 class="title-ar">مفضلتي</h1>
+                <p class="title-en">My Favorites</p>
+            </div>
+        </header>
+
+        <!-- قائمة المفضلة -->
+        <div id="favoritesContainer">
+            <!-- سيتم ملؤها بواسطة JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // شاشة التحميل
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loadingScreen');
+                loadingScreen.classList.add('fade-out');
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 800);
+            }, 1000);
+        });
+
+        // إنشاء النقاط البيضاء المتحركة
+        function createFloatingDots() {
+            const container = document.getElementById('floatingDots');
+            const dotCount = 30;
+            for (let i = 0; i < dotCount; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                dot.style.left = Math.random() * 100 + '%';
+                dot.style.animationDuration = (10 + Math.random() * 10) + 's';
+                dot.style.animationDelay = Math.random() * 5 + 's';
+                const size = 3 + Math.random() * 3;
+                dot.style.width = size + 'px';
+                dot.style.height = size + 'px';
+                container.appendChild(dot);
+            }
+        }
+        window.addEventListener('load', createFloatingDots);
+
+        // الوضع الداكن/الفاتح
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('themeIcon');
+            const isDark = body.classList.toggle('light-mode');
+            if (isDark) {
+                icon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'light');
+            } else {
+                icon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const icon = document.getElementById('themeIcon');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                icon.className = 'fas fa-sun';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadTheme);
+
+        // عرض المفضلة
+        function displayFavorites() {
+            const container = document.getElementById('favoritesContainer');
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+
+            if (favorites.length === 0) {
+                container.innerHTML = `
+                    <div class="favorites-empty">
+                        <div class="favorites-empty-icon">💔</div>
+                        <div class="favorites-empty-text">لا توجد عناصر في المفضلة</div>
+                        <div class="favorites-empty-text-en">No items in favorites</div>
+                        <div class="favorites-empty-hint">قم بإضافة آيات أو أحاديث من صفحاتها</div>
+                        <div class="favorites-empty-hint-en">Add verses or hadiths from their pages</div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '<div class="favorites-list">' + favorites.map((item, index) => {
+                const typeText = item.type === 'verse' ? 'آية' : 'حديث';
+                const typeTextEn = item.type === 'verse' ? 'Verse' : 'Hadith';
+                const emotionText = item.emotion ? ` - ${item.emotion}` : '';
+                const borderColor = item.color || '#E91E63';
+
+                return `
+                    <div class="favorite-item" style="border-right-color: ${borderColor};">
+                        <div class="favorite-item-header">
+                            <div class="favorite-item-title">${escapeHtml(item.name)}</div>
+                            <div class="favorite-item-type">${typeText}${emotionText}</div>
+                        </div>
+                        <div class="favorite-item-text">${escapeHtml(item.text.substring(0, 200))}${item.text.length > 200 ? '...' : ''}</div>
+                        <div class="favorite-item-actions">
+                            <button onclick="viewItem('${item.type}', '${item.emotionKey || ''}', ${item.verseIndex || 0}, ${item.hadithId || 0})" class="action-btn">
+                                <i class="fas fa-eye"></i>
+                                <span>عرض</span>
+                                <span class="action-btn-en">View</span>
+                            </button>
+                            <button onclick="removeFavorite(${index})" class="remove-favorite-btn">
+                                <i class="fas fa-trash"></i>
+                                <span>حذف</span>
+                                <span class="remove-btn-en">Delete</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('') + '</div>';
+        }
+
+        // عرض العنصر
+        function viewItem(type, emotionKey, verseIndex, hadithId) {
+            if (type === 'verse') {
+                window.location.href = `ayat.html#${emotionKey}_${verseIndex}`;
+            } else if (type === 'hadith') {
+                window.location.href = `hadiths.html#hadith_${hadithId}`;
+            }
+        }
+
+        // حذف من المفضلة
+        function removeFavorite(index) {
+            let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            favorites.splice(index, 1);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            displayFavorites();
+            showNotification('تم الحذف من المفضلة | Removed from favorites');
+        }
+
+        // تنظيف HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // إظهار الإشعارات
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // تحميل المفضلة عند فتح الصفحة
+        window.addEventListener('load', displayFavorites);
+    </script>
+</body>
+</html>
